@@ -1,0 +1,18 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		/* Add CSS here. See the GWT docs on UI Binder for more
+		details */
+		.important {
+		font-weight: bold;
+		}
+	</ui:style>
+	<g:HTMLPanel>
+		<div class="hero-unit">
+              <h1>Hello, world!</h1>
+              <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+              <p><a class="btn btn-primary btn-large">Learn more</a></p>
+            </div>
+	</g:HTMLPanel>
+
+</ui:UiBinder> 
