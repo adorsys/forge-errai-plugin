@@ -34,10 +34,10 @@ public class ErraiPluginFacet extends BaseFacet {
 	@Override
 	public boolean install() {
 		this.resourceUtils = new RessourceUtils(project);
-		shellPrompt.promptBoolean("This Will  Overide Some Of Your Files; Continue ?");
+		shellPrompt.promptBoolean("This Will  Overide Some Of Your Files, Continue ?");
 		createWebappFiles();
 		createAppFiles();
-		createResourceFiles();
+		createErraiPropertiesFiles();
 		createTestFiles();
 		generatePOMFile();
 		return true;
@@ -53,10 +53,10 @@ public class ErraiPluginFacet extends BaseFacet {
 		String artifactId = mavenProject.getArtifactId();
 		String version = mavenProject.getVersion();
 		System.out.println(groupId+", "+artifactId+", "+version);
-
 		stream = resourceUtils.xmlKeyModifier(stream, "${groupId}", groupId, "\n");
 		stream = resourceUtils.xmlKeyModifier(stream, "${artifactId}", artifactId,"\n");
 		stream = resourceUtils.xmlKeyModifier(stream, "${version}", version, "\n");
+		stream = resourceUtils.xmlKeyModifier(stream, "${basePackage}", resourceUtils.getBasePackage(), "\n");
 
 		pomFile.setContents(stream);
 	}
@@ -64,14 +64,18 @@ public class ErraiPluginFacet extends BaseFacet {
 	private void createTestFiles() {
 	}
 
-	private void createResourceFiles() {
-
+	private void createErraiPropertiesFiles() {
+		DirectoryResource resourceDirectory = resourceUtils.getResourceDirectory();
+		String[][] erraiPropertiesFiles = { { "/errai-resources/ErraiApp.properties", "ErraiApp.properties" },
+				{ "/errai-resources/ErraiService.properties", "ErraiService.properties" }};
+		resourceUtils.createFiles(resourceDirectory, erraiPropertiesFiles);
 	}
 
 	private void createAppFiles() {
 		resourceUtils.getBasePackageDirectory().createNewFile();
 		DirectoryResource javaBasePackageResource = resourceUtils.getJavaBasePackageResource();
 		String[][] uiFiles = { { "/errai-resources/welcome-ui/App.java", "App.java" },
+				{ "/errai-resources/welcome-ui/App.gwt.xml", "App.gwt.xml" },
 				{ "/errai-resources/welcome-ui/BodyCore.java", "BodyCore.java" },
 				{ "/errai-resources/welcome-ui/BodyCore.ui.xml", "BodyCore.ui.xml" } };
 		resourceUtils.createFiles(javaBasePackageResource, uiFiles);

@@ -95,7 +95,6 @@ public class RessourceUtils {
 	}
 	public String updateFileKeys(InputStream fileInputStream, String key, String value,String delimiter) {
 		String templateJavaFileString = new java.util.Scanner(fileInputStream).useDelimiter(delimiter).next();
-		System.out.println("Template : "+templateJavaFileString);
 		if(templateJavaFileString.contains(key)) {
 			templateJavaFileString = templateJavaFileString.replace(key, value);
 		}
@@ -120,7 +119,6 @@ public class RessourceUtils {
 			String nextLine = fileInputStreamScanner.nextLine();
 			if(nextLine.contains(key)) {
 				nextLine = nextLine.replace(key, value);
-				System.out.println("Replace In "+nextLine+", with : "+value);
 			}
 			stringBuffer.append(nextLine+"\n");
 		}

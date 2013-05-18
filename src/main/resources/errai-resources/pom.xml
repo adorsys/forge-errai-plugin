@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-		<groupId>${groupId}</groupId>
+	<groupId>${groupId}</groupId>
 	<packaging>war</packaging>
 	<artifactId>${artifactId}</artifactId>
 	<version>${version}</version>
@@ -76,10 +76,12 @@
 			<plugin>
 				<groupId>org.jboss.as.plugins</groupId>
 				<artifactId>jboss-as-maven-plugin</artifactId>
+				<version>7.4.Final</version>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
+				<version>2.5.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -96,10 +98,14 @@
 					<soyc>false</soyc>
 					<hostedWebapp>src/main/webapp/</hostedWebapp>
 					<treeLogger>true</treeLogger>
+					<i18nMessagesBundles>
+<!-- 						<i18nMessagesBundle>${basePackage}.Messages</i18nMessagesBundle> -->
+					</i18nMessagesBundles>
 				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -110,12 +116,14 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
 				<configuration>
 					<packagingExcludes>WEB-INF/classes/**,WEB-INF/lib/**</packagingExcludes>
 				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.5</version>
 				<configuration>
 					<skipTests>true</skipTests>
 				</configuration>
@@ -123,6 +131,7 @@
 			<plugin>
 				<groupId>org.jboss.errai</groupId>
 				<artifactId>jacoco-gwt-maven-plugin</artifactId>
+				<version>0.5.4.201202141554</version>
 				<executions>
 					<execution>
 						<id>jacoco-gwt-prepare-agent</id>
@@ -145,6 +154,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
 				<configuration>
 					<filesets>
 						<fileset>

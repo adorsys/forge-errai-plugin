@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.4//EN"
+        "http://google-web-toolkit.googlecode.com/svn/releases/2.4/distro-source/core/src/gwt-module.dtd">
+<module rename-to='App'>
+	<inherits name="com.google.gwt.core.Core" />
+	<inherits name="com.google.gwt.useragent.UserAgent" />
+	<set-configuration-property name="devModeRedirectEnabled"
+		value="true" />
+	<set-property name="compiler.useSourceMaps" value="false" />
+	<inherits name='com.google.gwt.user.theme.standard.StandardResources' />
+	<inherits name='com.google.gwt.user.theme.clean.Clean' />
+
+	<inherits name="org.jboss.errai.common.ErraiCommon" />
+	<inherits name="org.jboss.errai.bus.ErraiBus" />
+	<inherits name="org.jboss.errai.ioc.Container" />
+	<inherits name="org.jboss.errai.enterprise.CDI" />
+	<inherits name="org.jboss.errai.databinding.DataBinding" />
+	<inherits name="org.jboss.errai.enterprise.Jaxrs" />
+	<inherits name="org.jboss.errai.ui.UI" />
+	<inherits name="com.google.gwt.validation.Validation" />
+
+	<inherits name='org.hibernate.validator.HibernateValidator' />
+
+	<inherits name='org.slf4j.Slf4j' />
+	<set-property name="gwt.logging.logLevel" value="FINE" />
+	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
+	<source path='' />
+
+	<inherits name="com.google.gwt.logging.Logging" />
+	<inherits name="org.hibernate.validator.HibernateValidator" />
+	<!-- replace-with
+	  class="de.adorsys.auth.client.ValidatorFactory">
+	  <when-type-is class="javax.validation.ValidatorFactory" />
+	</replace-with -->
+</module>
