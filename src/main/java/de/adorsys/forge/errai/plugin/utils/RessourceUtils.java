@@ -114,16 +114,17 @@ public class RessourceUtils {
 		return convertionResult;
 	}
 	public ByteArrayInputStream xmlKeyModifier(InputStream fileInputStream, String key, String value,String delimiter) {
-		Scanner templateJavaFileScanner = new java.util.Scanner(fileInputStream);
+		Scanner fileInputStreamScanner = new java.util.Scanner(fileInputStream).useDelimiter(delimiter);
 		StringBuffer stringBuffer = new StringBuffer("");
-		while (templateJavaFileScanner.hasNext()) {
-			String nextLine = templateJavaFileScanner.nextLine();
+		while (fileInputStreamScanner.hasNext()) {
+			String nextLine = fileInputStreamScanner.nextLine();
 			if(nextLine.contains(key)) {
-				nextLine.replace(key, value);
-				System.out.println("Replace In "+nextLine);
+				nextLine = nextLine.replace(key, value);
+				System.out.println("Replace In "+nextLine+", with : "+value);
 			}
-			stringBuffer.append(nextLine);
+			stringBuffer.append(nextLine+"\n");
 		}
+		fileInputStreamScanner.close();
 		return new ByteArrayInputStream(stringBuffer.toString().getBytes());
 	}
 }

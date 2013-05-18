@@ -54,9 +54,9 @@ public class ErraiPluginFacet extends BaseFacet {
 		String version = mavenProject.getVersion();
 		System.out.println(groupId+", "+artifactId+", "+version);
 
-		stream = resourceUtils.xmlKeyModifier(stream, "${groupId}", groupId, null);
-		stream = resourceUtils.xmlKeyModifier(stream, "${artifactId}", artifactId,null);
-		stream = resourceUtils.xmlKeyModifier(stream, "${version}", version, null);
+		stream = resourceUtils.xmlKeyModifier(stream, "${groupId}", groupId, "\n");
+		stream = resourceUtils.xmlKeyModifier(stream, "${artifactId}", artifactId,"\n");
+		stream = resourceUtils.xmlKeyModifier(stream, "${version}", version, "\n");
 
 		pomFile.setContents(stream);
 	}
