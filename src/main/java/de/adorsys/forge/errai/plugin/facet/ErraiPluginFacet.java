@@ -75,10 +75,20 @@ public class ErraiPluginFacet extends BaseFacet {
 		resourceUtils.getBasePackageDirectory().createNewFile();
 		DirectoryResource javaBasePackageResource = resourceUtils.getJavaBasePackageResource();
 		String[][] uiFiles = { { "/errai-resources/welcome-ui/App.java", "App.java" },
-				{ "/errai-resources/welcome-ui/App.gwt.xml", "App.gwt.xml" },
 				{ "/errai-resources/welcome-ui/BodyCore.java", "BodyCore.java" },
-				{ "/errai-resources/welcome-ui/BodyCore.ui.xml", "BodyCore.ui.xml" } };
+				{ "/errai-resources/welcome-ui/BodyCore.ui.xml", "BodyCore.ui.xml" },
+				{"/errai-resources/validation/ValidatorFactory.java","ValidatorFactory.java"}};
+
+		createGwtXmlFile();
 		resourceUtils.createFiles(javaBasePackageResource, uiFiles);
+	}
+
+	private void createGwtXmlFile() {
+		FileResource<?> gwtXmlFile = (FileResource<?>) resourceUtils.getJavaBasePackageResource().getChild("App.gwt.xml");
+		InputStream stream = ErraiPluginFacet.class.getResourceAsStream( "/errai-resources/welcome-ui/App.gwt.xml");
+		System.out.println("Base Package : "+resourceUtils.getBasePackage());
+		stream = resourceUtils.xmlKeyModifier(stream, "${packageName}", resourceUtils.getBasePackage(), "\n");
+		gwtXmlFile.setContents(stream);
 	}
 
 	private void createWebappFiles() {
@@ -111,7 +121,6 @@ public class ErraiPluginFacet extends BaseFacet {
 				{ "/errai-resources/img/glyphicons-halflings.png", "glyphicons-halflings.png" } };
 		String[][] webXmlFileNames = { { "/errai-resources/WEB-INF/web.xml", "web.xml" } };
 		String[][] indexFileNames = { { "/errai-resources/index.html", "index.html" } };
-		// create files
 		resourceUtils.createFiles(cssDirectory, cssFilesNames);
 		resourceUtils.createFiles(javaScriptDirectory, javaScriptsFileNames);
 		resourceUtils.createFiles(imageDirectory, imagesFileNames);
@@ -122,5 +131,18 @@ public class ErraiPluginFacet extends BaseFacet {
 	@Override
 	public boolean isInstalled() {
 		return project.hasFacet(ErraiPluginFacet.class);
+	}
+
+
+	public void createViewWithGivenName(String capitalizedName) {
+		DirectoryResource valueBoxEditorDecoratorPackage = resourceUtils.getValueBoxEditorDecoratorPackage();
+		DirectoryResource javaBasePackageResource = resourceUtils.getJavaBasePackageResource();
+
+		String[][] validationFactoryDecorator = {{"/errai-resources/validation/ValueBoxEditorDecorator.ui.xml","ValueBoxEditorDecorator.ui.xml"}};
+
+		if(!resourceUtils.fileExist(valueBoxEditorDecoratorPackage, "ValueBoxEditorDecorator.ui.xml")) {
+			resourceUtils.createFiles(valueBoxEditorDecoratorPackage, validationFactoryDecorator);
+		}
+		resourceUtils.createViewFromTemplate(capitalizedName, javaBasePackageResource);
 	}
 }

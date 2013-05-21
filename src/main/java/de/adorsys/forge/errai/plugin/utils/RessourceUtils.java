@@ -6,12 +6,14 @@ package de.adorsys.forge.errai.plugin.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.JavaSourceFacet;
 import org.jboss.forge.resources.DirectoryResource;
 import org.jboss.forge.resources.FileResource;
+import org.jboss.forge.resources.Resource;
 
 import de.adorsys.forge.errai.plugin.facet.ErraiPluginFacet;
 
@@ -38,19 +40,43 @@ public class RessourceUtils {
 		return directorResource.getOrCreateChildDirectory(subDirectoryName);
 	}
 
-	public void createFiles(DirectoryResource directoryResource,String[] ... fileNames) {
+	public void createFiles(DirectoryResource directoryResource, String[]... fileNames) {
 		for (int i = 0; i < fileNames.length; i++) {
 			String[] fileMapping = fileNames[i];
 			String resourceToLoad = fileMapping[0];
 			InputStream resourceAsStream = ErraiPluginFacet.class.getResourceAsStream(resourceToLoad);
-			if(resourceToLoad.endsWith(".java")) {
+			if (resourceToLoad.endsWith(".java")) {
 				resourceAsStream = updatePackageName(resourceAsStream, getBasePackage());
 			}
 			FileResource<?> child = (FileResource<?>) directoryResource.getChild(fileMapping[1]);
-			if(child.createNewFile()) {
-				child.setContents(resourceAsStream);
-			}
+			writeFile(resourceAsStream, child);
 		}
+	}
+
+	public void createViewFromTemplate(String viewName, DirectoryResource directoryResource) {
+
+		InputStream viewTemplateStream = ErraiPluginFacet.class.getResourceAsStream("/errai-resources/views/ViewTemplate.java");
+		String finalViewFileName = viewName + "View.java";
+		InputStream viewTemplateWithReplacedViewName = replaceViewName(viewName, viewTemplateStream);
+		viewTemplateWithReplacedViewName = updatePackageName(viewTemplateWithReplacedViewName, getBasePackage());
+		FileResource<?> finalViewFileResource = (FileResource<?>) directoryResource.getChild(finalViewFileName);
+		writeFile(viewTemplateWithReplacedViewName, finalViewFileResource);
+
+		InputStream xmlUiViewTemplateStream = ErraiPluginFacet.class.getResourceAsStream("/errai-resources/views/ViewTemplate.ui.xml");
+		String finalUiXmlViewFileName = viewName + "View.ui.xml";
+		FileResource<?> finalUiXmlViewFileResource = (FileResource<?>) directoryResource.getChild(finalUiXmlViewFileName);
+		writeFile(xmlUiViewTemplateStream, finalUiXmlViewFileResource);
+	}
+
+	private void writeFile(InputStream xmlUiViewTemplateStream, FileResource<?> finalUiXmlViewFileResource) {
+		if (finalUiXmlViewFileResource.createNewFile()) {
+			finalUiXmlViewFileResource.setContents(xmlUiViewTemplateStream);
+		}
+	}
+
+	private InputStream replaceViewName(String viewName, InputStream inputStream) {
+		String updatedFileContent = updateFileKeys(inputStream, "${className}", viewName);
+		return new ByteArrayInputStream(updatedFileContent.getBytes());
 	}
 
 	public DirectoryResource getWebRootDirectory() {
@@ -82,6 +108,12 @@ public class RessourceUtils {
 		return project.getFacet(JavaSourceFacet.class).getBasePackageResource();
 	}
 
+	public DirectoryResource getValueBoxEditorDecoratorPackage() {
+		return getBasePackageDirectory().getOrCreateChildDirectory("com").getOrCreateChildDirectory("google")
+				.getOrCreateChildDirectory("gwt").getOrCreateChildDirectory("editor").getOrCreateChildDirectory("ui")
+				.getOrCreateChildDirectory("client");
+	}
+
 	/**
 	 * @param fileInputStream
 	 * @param key
@@ -93,9 +125,10 @@ public class RessourceUtils {
 		String templateJavaFileString = new java.util.Scanner(fileInputStream).useDelimiter("\\A").next();
 		return templateJavaFileString.replace(key, value);
 	}
-	public String updateFileKeys(InputStream fileInputStream, String key, String value,String delimiter) {
+
+	public String updateFileKeys(InputStream fileInputStream, String key, String value, String delimiter) {
 		String templateJavaFileString = new java.util.Scanner(fileInputStream).useDelimiter(delimiter).next();
-		if(templateJavaFileString.contains(key)) {
+		if (templateJavaFileString.contains(key)) {
 			templateJavaFileString = templateJavaFileString.replace(key, value);
 		}
 		return templateJavaFileString;
@@ -112,17 +145,28 @@ public class RessourceUtils {
 		s.close();
 		return convertionResult;
 	}
-	public ByteArrayInputStream xmlKeyModifier(InputStream fileInputStream, String key, String value,String delimiter) {
+
+	public ByteArrayInputStream xmlKeyModifier(InputStream fileInputStream, String key, String value, String delimiter) {
 		Scanner fileInputStreamScanner = new java.util.Scanner(fileInputStream).useDelimiter(delimiter);
 		StringBuffer stringBuffer = new StringBuffer("");
 		while (fileInputStreamScanner.hasNext()) {
 			String nextLine = fileInputStreamScanner.nextLine();
-			if(nextLine.contains(key)) {
+			if (nextLine.contains(key)) {
 				nextLine = nextLine.replace(key, value);
 			}
-			stringBuffer.append(nextLine+"\n");
+			stringBuffer.append(nextLine + "\n");
 		}
 		fileInputStreamScanner.close();
 		return new ByteArrayInputStream(stringBuffer.toString().getBytes());
+	}
+
+	public boolean fileExist(DirectoryResource directoryResource,String fileName) {
+		List<Resource<?>> listResources = directoryResource.listResources();
+		for (Resource<?> resource : listResources) {
+			if(resource.getName().equals(fileName)) {
+				return true;
+			}
+		}
+		return false ;
 	}
 }

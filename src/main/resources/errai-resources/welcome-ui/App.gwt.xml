@@ -28,8 +28,8 @@
 
 	<inherits name="com.google.gwt.logging.Logging" />
 	<inherits name="org.hibernate.validator.HibernateValidator" />
-	<!-- replace-with
-	  class="de.adorsys.auth.client.ValidatorFactory">
+	<replace-with
+	  class="${packageName}.ValidatorFactory">
 	  <when-type-is class="javax.validation.ValidatorFactory" />
-	</replace-with -->
+	</replace-with>
 </module>
