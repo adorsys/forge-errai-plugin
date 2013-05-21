@@ -1,17 +1,15 @@
 Getting Started
 ===============
-1. clone the project : <pre><code>git clone https://github.com/adorsys/forge-errai-plugin.git</code></pre>
-2. start forge in a work directory
-3. install the plugin, create a project and setup errai, using the plugin
+1. install the plugin, create a project and setup errai, using the plugin
 <br  />
 <pre>
     <code>
-        forge source-plugin ../path-to-the-cloned-directory/forge-errai-plugin/
+        forge git-plugin https://github.com/adorsys/forge-errai-plugin.git
         new-project --named forge.test --type war --topLevelPackage forge.errai.test.one
         adorsyserraiplugin setup 
     </code>
 </pre>
-4. compile and run the project
+2. compile and run the project
 <pre>
     <code>
         cd ./forge.test
@@ -20,7 +18,7 @@ Getting Started
     </code>
 </pre>
 
-5. open in the gwt dev-mode, open with the default browser, and **There we go !**
+3. open in the gwt dev-mode, open with the default browser, and **There we go !**
 
 What is Involved
 ==============
@@ -40,4 +38,4 @@ Works out of the box
 8. errai-cdi
 9. errai-common
 
-**yes ! Just make a pull request :)**
+**yes ! Just send a pull request :)**
